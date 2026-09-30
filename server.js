@@ -4,6 +4,8 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 require('dotenv').config();
 
+const db = require('./config/db');
+
 const authRoutes = require('./routes/authRoutes');
 const aiTutorRoutes = require ('./routes/aiTutors');
 
@@ -41,6 +43,19 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000, // Valid for 24 hours
   })
 );
+
+
+
+async function testDatabase() {
+  try {
+    const result = await db.query('SELECT NOW()');
+    console.log('✅ Database connected:', result.rows[0]);
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+  }
+}
+
+testDatabase();
 
 // 2. Initialize Passport and hook it up to session engines
 app.use(passport.initialize());
