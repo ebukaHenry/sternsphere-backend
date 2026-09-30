@@ -48,7 +48,7 @@ app.use(
 
 async function testDatabase() {
   try {
-    const result = await db.query('SELECT NOW()');
+    //const result = await db.query('SELECT NOW()');
     console.log('✅ Database connected:', result.rows[0]);
   } catch (error) {
     console.error('❌ Database connection failed:', error);
