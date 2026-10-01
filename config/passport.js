@@ -41,16 +41,16 @@ passport.use(
 );
 
 // Serialize user into the session cookies
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
+// passport.serializeUser((user, done) => {
+//   done(null, user.id);
+// });
 
-// Deserialize user from session cookies to fetch user details
-passport.deserializeUser(async (id, done) => {
-  try {
-    const userQuery = await db.query('SELECT id, name, email FROM users WHERE id = $1', [id]);
-    done(null, userQuery.rows[0]);
-  } catch (error) {
-    done(error, null);
-  }
-});
+// // Deserialize user from session cookies to fetch user details
+// passport.deserializeUser(async (id, done) => {
+//   try {
+//     const userQuery = await db.query('SELECT id, name, email FROM users WHERE id = $1', [id]);
+//     done(null, userQuery.rows[0]);
+//   } catch (error) {
+//     done(error, null);
+//   }
+// });
