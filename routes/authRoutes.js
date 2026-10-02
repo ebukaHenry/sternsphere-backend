@@ -43,13 +43,22 @@ router.get(
   }), // Disable session storage for stateless JWT handling
   (req, res) => {
     // Generate a secure JWT session token for the authenticated user
-    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    
+    const token = jwt.sign({ 
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email,
+      role: req.user.role || 'user' // Default role assignment if not specified
+     }, 
+     process.env.JWT_SECRET, 
+     { expiresIn: '7d' }
+    );
+
     // Convert user object details to URI encoding strings safely
     const userData = encodeURIComponent(JSON.stringify({
       id: req.user.id,
       name: req.user.name,
-      email: req.user.email
+      email: req.user.email,
+      role: req.user.role || 'user'
     }));
 
     // Redirect back to your React app with parameters inside URL queries

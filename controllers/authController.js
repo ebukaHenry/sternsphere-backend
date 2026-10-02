@@ -6,7 +6,11 @@ const crypto = require('crypto');
 
 // NodeMailer Mail Transport configuration setup interface
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // Swap this configuration out with your primary mail carrier block if not using Gmail
+  //service: 'gmail', // Swap this configuration out with your primary mail carrier block if not using Gmail
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // true for 465, false for other ports
+  family: 4, // Use IPv4 to avoid potential IPv6 issues
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -92,12 +96,20 @@ exports.verifyEmail = async (req, res) => {
     );
 
     // Issue JWT token immediately to log the user in seamlessly
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ 
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role || 'user' // Default role assignment if not specified
+     }, 
+     process.env.JWT_SECRET, 
+     { expiresIn: '7d' }
+    );
 
     res.status(200).json({
       message: 'Account successfully verified.',
       token,
-      user: { id: user.id, name: user.name, email: user.email }
+      user: { id: user.id, name: user.name, email: user.email, role: user.role || 'user' }
     });
 
   } catch (error) {
@@ -130,12 +142,20 @@ exports.login = async (req, res) => {
     }
 
     // Generate JWT access token
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ 
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role || 'user' // Default role assignment if not specified
+     }, 
+     process.env.JWT_SECRET, 
+     { expiresIn: '7d' }
+    );
 
     res.status(200).json({
       message: 'Login successful.',
       token,
-      user: { id: user.id, name: user.name, email: user.email }
+      user: { id: user.id, name: user.name, email: user.email, role: user.role || 'user' }
     });
 
   } catch (error) {
